@@ -28,8 +28,33 @@ You have found the easiest way to install & manage WireGuard on any Linux host!
 
 * A host with a kernel that supports WireGuard (all modern kernels).
 * A host with Docker installed.
-
+* Enable iptable kernel module.
+  
 ## Installation
+
+### 0. Enable iptable module
+First check if iptable kernel module is enabled:
+```
+$ lsmod | grep table
+```
+If command output contain iptable as following , then iptable was enabled:
+```
+iptable_filter         16384  1
+iptable_nat            16384  1
+nf_nat                 57344  5 xt_nat,nft_masq,nft_chain_nat,iptable_nat,xt_MASQUERADE
+nf_tables             278528  866 nft_ct,nft_compat,nft_reject_inet,nft_fib_ipv6,nft_fib_ipv4,nft_counter,nft_masq,nft_chain_nat,nft_reject,nft_fib,nft_fib_inet
+nfnetlink              20480  6 nft_compat,nf_conntrack_netlink,nf_tables,ip_set
+ip_tables              28672  2 iptable_filter,iptable_nat
+libcrc32c              16384  4 nf_conntrack,nf_nat,nf_tables,xfs
+```
+Otherwise you must enable it by following command:
+```
+$ echo ip_tables | sudo tee /etc/modules-load.d/ip_tables.conf
+```
+And then restart os:
+```
+$ sudo reboot
+```
 
 ### 1. Install Docker
 
